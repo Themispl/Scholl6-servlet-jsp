@@ -5,16 +5,7 @@ public class InsertUserDto extends BaseUserDTO{
 
     public InsertUserDto() {}
 
-    public InsertUserDto(String username, String password, String corfimPassword) {
-        super(username, password);
-        this.corfimPassword = corfimPassword;
-    }
-
-    public String getCorfimPassword() {
-        return corfimPassword;
-    }
-
-    public void setCorfimPassword(String corfimPassword) {
-        this.corfimPassword = corfimPassword;
+    public InsertUserDto(String username, String password, String confirmedPassword) {
+        super(username, password, confirmedPassword);
     }
 }
