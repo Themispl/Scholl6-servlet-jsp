@@ -19,8 +19,8 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String isError = request.getParameter("isError");
-        request.setAttribute("isError", isError == null ? "false" : isError);
-        request.getRequestDispatcher("login.jsp").forward(request, response);
+        request.setAttribute("isError", isError == null ? "false" : "true");
+        request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class LoginController extends HttpServlet {
             principleIsAutheticated = AuthenticationProvider.authenticate(userLoginDTO);
                     if(principleIsAutheticated){
                         HttpSession session = request.getSession(false);
-                        session.setAttribute("user", userLoginDTO);
+                        session.setAttribute("username", username);
                         response.sendRedirect(request.getContextPath() + "/teachers");
                     }else {
                         response.sendRedirect(request.getContextPath() + "/login?isError=true");

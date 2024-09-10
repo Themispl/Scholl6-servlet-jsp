@@ -3,7 +3,7 @@ package gr.aueb.cf.schoolapp.dto;
 public abstract class BaseDTO {
     private String firstname;
     private String lastname;
-    private String confirmedPassword;
+
 
     public BaseDTO(){}
 

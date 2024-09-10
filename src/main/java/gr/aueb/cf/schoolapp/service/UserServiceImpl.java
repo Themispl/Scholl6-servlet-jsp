@@ -2,7 +2,7 @@ package gr.aueb.cf.schoolapp.service;
 
 import gr.aueb.cf.schoolapp.dao.IUserDAO;
 import gr.aueb.cf.schoolapp.dao.exceptions.UserDAOException;
-import gr.aueb.cf.schoolapp.dto.InsertUserDto;
+import gr.aueb.cf.schoolapp.dto.InsertUserDTO;
 import gr.aueb.cf.schoolapp.model.User;
 import gr.aueb.cf.schoolapp.service.exceptions.UserNotFoundException;
 
@@ -14,7 +14,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public User insertUser(InsertUserDto dto) throws UserDAOException {
+    public User insertUser(InsertUserDTO dto) throws UserDAOException {
         User user;
 
         try {
@@ -71,7 +71,7 @@ public class UserServiceImpl implements IUserService {
         }
     }
 
-    private User mapToUser(InsertUserDto dto){
+    private User mapToUser(InsertUserDTO dto){
         return new User(null,dto.getUsername(), dto.getPassword());
     }
 }

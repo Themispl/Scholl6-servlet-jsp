@@ -2,7 +2,7 @@ package gr.aueb.cf.schoolapp.dto;
 
 public class TeacherUpdateDTO  extends BaseDTO{
     private Integer id;
-    public TeacherUpdateDTO() {}
+    public TeacherUpdateDTO(long id, String firstname, String lastname) {}
 
     public TeacherUpdateDTO(Integer id, String firstname, String lastname) {
         super(firstname, lastname);
