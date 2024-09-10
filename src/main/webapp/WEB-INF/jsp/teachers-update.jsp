@@ -13,31 +13,32 @@
 <%@ include file="header.jsp"%>
 <div class="main-content">
 
-<%--    <div class="m-bottom">--%>
-<%--        <a href="${pageContext.request.contextPath}/teachers/insert">Εισαγωγή Καθηγητή</a>--%>
-<%--    </div>--%>
-
+    <h2>Update Teacher</h2>
     <div class="form m-bottom">
 
-        <form method="POST" action="">
-            <div class="row m-bottom">
-                <input class="m-bottom" type="text" name="firstname" value="${requestScope.teacherInsertDTO.firstname}" required placeholder="Firstname">
-                <p class="validation-error">${requestScope.firstnameMessage}</p>
-            </div>
-            <div class="row m-bottom">
-                <input class="m-bottom" type="text" name="lastname" value="${requestScope.teacherInsertDTO.lastname}" required placeholder="Lastname">
-                <p class="validation-error">${requestScope.lastnameMessage}</p>
-            </div>
-            <div class="row">
-                <button type="submit">Εισαγωγή</button>
-            </div>
-        </form>
-    </div>
+        <form action="${pageContext.request.contextPath}/teachers/update" method="post">
+            <input type="hidden" name="id" value="${teacherUpdateDTO.id}">
 
-    <div class="m-bottom">
+            <label for="firstname">First Name:</label>
+            <input type="text" id="firstname" name="firstname" value="${teacherUpdateDTO.firstname}">
+            <c:if test="${!empty firstnameMessage}">
+                <span style="color: red;">${firstnameMessage}</span>
+            </c:if>
+            <br><br>
+
+            <label for="lastname">Last Name:</label>
+            <input type="text" id="lastname" name="lastname" value="${teacherUpdateDTO.lastname}">
+            <c:if test="${!empty lastnameMessage}">
+                <span style="color: red;">${lastnameMessage}</span>
+            </c:if>
+            <br><br>
+
+            <input type="submit" value="Update Teacher">
+        </form>
+
+        <div class="m-bottom">
         <a href="${pageContext.request.contextPath}/teachers">Επιστροφή</a>
     </div>
-
 
     <div>
 <%--    <c:if test="${requestScope.deleteAPIError}">--%>

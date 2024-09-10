@@ -32,9 +32,9 @@ public class UserRegisterController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //data binding
         InsertUserDTO insertUserDto = new InsertUserDTO();
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        String confirmPassword = request.getParameter("confirmPassword");
+        String username = request.getParameter("username").trim();
+        String password = request.getParameter("password").trim();
+        String confirmPassword = request.getParameter("confirmPassword").trim();
 
         String errorMessage = "";
         Map<String, String> errors;

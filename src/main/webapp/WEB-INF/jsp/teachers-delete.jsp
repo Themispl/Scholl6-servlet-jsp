@@ -29,7 +29,7 @@
                 <p class="validation-error">${requestScope.lastnameMessage}</p>
             </div>
             <div class="row">
-                <button type="submit">Εισαγωγή</button>
+                <button type="submit">Διαγραφή</button>
             </div>
         </form>
     </div>

@@ -5,9 +5,11 @@ import gr.aueb.cf.schoolapp.dao.TeacherDAOImpl;
 import gr.aueb.cf.schoolapp.dao.exceptions.TeacherDAOException;
 import gr.aueb.cf.schoolapp.dto.TeacherInsertDTO;
 import gr.aueb.cf.schoolapp.dto.TeacherReadOnlyDTO;
+import gr.aueb.cf.schoolapp.dto.TeacherUpdateDTO;
 import gr.aueb.cf.schoolapp.model.Teacher;
 import gr.aueb.cf.schoolapp.service.ITeacherService;
 import gr.aueb.cf.schoolapp.service.TeacherServiceImpl;
+import gr.aueb.cf.schoolapp.service.exceptions.TeacherNotFoundException;
 import gr.aueb.cf.schoolapp.valiator.TeacherValidetor;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -18,24 +20,31 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
 
-@WebServlet("/teachers/insert")
-public class TeachersInsertController extends HttpServlet {
-
+@WebServlet("/teachers/update")
+public class TeacherUpdateController extends HttpServlet {
     private final ITeacherDAO teacherDAO = new TeacherDAOImpl();
     private final ITeacherService teacherService = new TeacherServiceImpl(teacherDAO);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/jsp/teachers-insert.jsp").forward(request, response);
+        Integer id = Integer.parseInt(request.getParameter("id").trim());
+        String firstName = request.getParameter("firstName").trim();
+        String lastName = request.getParameter("lastName").trim();
+
+        TeacherUpdateDTO updateDTO = new TeacherUpdateDTO(id, firstName, lastName);
+        request.setAttribute("updateDTO", updateDTO);
+        request.getRequestDispatcher("/WEB-INF/jsp/teachers-update.jsp").forward(request, response);
+
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        TeacherInsertDTO teacherInsertDTO;
-        //Data Binding
+        Integer id = Integer.parseInt(request.getParameter("id").trim());
+        String firstName = request.getParameter("firstName").trim();
+        String lastName = request.getParameter("lastName").trim();
 
-        String firstname = request.getParameter("firstname").trim();
-        String lastname = request.getParameter("lastname").trim();
+        TeacherUpdateDTO updateDTO = new TeacherUpdateDTO(id, firstName, lastName);
+        //Data Binding
 
         String errorMessage = "";
         Map<String, String> errors;
@@ -46,8 +55,8 @@ public class TeachersInsertController extends HttpServlet {
         Teacher teacher;
 
         try{
-            teacherInsertDTO = new TeacherInsertDTO(firstname, lastname);
-            errors = TeacherValidetor.validate(teacherInsertDTO);
+
+            errors = TeacherValidetor.validate(updateDTO);
 
             if(!errors.isEmpty()){
                 firstnameMessage = errors.getOrDefault("firstname", "");
@@ -56,20 +65,20 @@ public class TeachersInsertController extends HttpServlet {
                 request.setAttribute("firstnameMessage", firstnameMessage);
                 request.setAttribute("lastnameMessage", lastnameMessage);
 
-                request.setAttribute("teacherInsertDTO", teacherInsertDTO);
-                request.getRequestDispatcher("/WEB-INF/jsp/teachers-insert.jsp").forward(request, response);
+                request.setAttribute("updateDTO", updateDTO);
+                request.getRequestDispatcher("/WEB-INF/jsp/teacher-update.jsp").forward(request, response);
                 return;
             }
-            teacher = teacherService.insertTeacher(teacherInsertDTO);
+            teacher = teacherService.updateTeacher(updateDTO);
             TeacherReadOnlyDTO teacherReadOnlyDTO = mapToTeacherReadOnlyDTO(teacher);
 
             request.setAttribute("teacherInfo", teacherReadOnlyDTO);
-            request.getRequestDispatcher("/WEB-INF/jsp/teacher-registered.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/jsp/teacher-updated.jsp").forward(request, response);
 
-        }catch (TeacherDAOException e){
+        }catch (TeacherDAOException | TeacherNotFoundException e){
             errorMessage = e.getMessage();
             request.setAttribute("errorMessage", errorMessage);
-            request.getRequestDispatcher("/WEB-INF/jsp/teachers-insert.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/jsp/teacher-update.jsp").forward(request, response);
         }
     }
 

@@ -46,6 +46,7 @@ public class TeachersViewController extends HttpServlet {
         }catch (TeacherDAOException e){
             message = e.getMessage();
             request.setAttribute("message", message);
+            request.getRequestDispatcher("/WEB-INF/jsp/teachers.jsp").forward(request, response);
         }
     }
 }
