@@ -55,12 +55,13 @@ public class UserRegisterController extends HttpServlet {
                 usernameMessage = errors.getOrDefault("username", "");
                 passwordMessage = errors.getOrDefault("password", "");
                 confirmPasswordMessage = errors.getOrDefault("confirmPassword", "");
-
+                role = errors.getOrDefault("role", "");
 
 
                 request.setAttribute("usernameMessage", usernameMessage);
                 request.setAttribute("passwordMessage", passwordMessage);
                 request.setAttribute("confirmPasswordMessage", confirmPasswordMessage);
+                request.setAttribute("role", role);
                 request.setAttribute("userRegisterDTO", insertUserDto);
                 request.getRequestDispatcher("/WEB-INF/jsp/user-register.jsp").forward(request, response);
                 return;
