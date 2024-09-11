@@ -1,61 +1,46 @@
-<%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Εισαγωγή Καθηγητών</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user-register.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<meta charset="UTF-8">
+<title>Teacher Update</title>
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/teacher-update.css">
 </head>
 <body>
 <%@ include file="header.jsp"%>
 <div class="main-content">
+	<div class="form m-bottom">
+		<form method="POST" action="${pageContext.request.contextPath}/teachers/update">
+			<div class="row m-bottom">
+				<label for="tid">Κωδικός</label>
+				<input id="tid" type="text" name="id" value="${requestScope.updateDTO.id}" readonly>
+				<p class="validation-error"></p>
+			</div>
 
-    <h2>Update Teacher</h2>
-    <div class="form m-bottom">
+			<div class="row m-bottom">
+				<label for="firstname">Όνομα</label>
+				<input id="firstname" type="text" name="firstname" value="${requestScope.updateDTO.firstname}">
+				<p class="validation-error">${requestScope.firstnameMessage}</p>
+			</div>
 
-        <form action="${pageContext.request.contextPath}/teachers/update" method="post">
-            <input type="hidden" name="id" value="${teacherUpdateDTO.id}">
+			<div class="row m-bottom">
+				<label for="lastname">Επώνυμο</label>
+				<input id="lastname" type="text" name="lastname" value="${requestScope.updateDTO.lastname}">
+				<p class="validation-error">${requestScope.lastnameMessage}</p>
+			</div>
 
-            <label for="firstname">First Name:</label>
-            <input type="text" id="firstname" name="firstname" value="${teacherUpdateDTO.firstname}">
-            <c:if test="${!empty firstnameMessage}">
-                <span style="color: red;">${firstnameMessage}</span>
-            </c:if>
-            <br><br>
+			<div>
+				<button type="submit">Ενημέρωση</button>
+			</div>
 
-            <label for="lastname">Last Name:</label>
-            <input type="text" id="lastname" name="lastname" value="${teacherUpdateDTO.lastname}">
-            <c:if test="${!empty lastnameMessage}">
-                <span style="color: red;">${lastnameMessage}</span>
-            </c:if>
-            <br><br>
+		</form>	
+	</div>	
 
-            <input type="submit" value="Update Teacher">
-        </form>
-
-        <div class="m-bottom">
-        <a href="${pageContext.request.contextPath}/teachers">Επιστροφή</a>
-    </div>
-
-    <div>
-<%--    <c:if test="${requestScope.deleteAPIError}">--%>
-        <p>${requestScope.message}</p>
-<%--    </c:if>--%>
+<%--	<c:if test="${requestScope.isError}">--%>
+		<p>${requestScope.message}</p>
+<%--	</c:if>--%>
 </div>
-
-<div>
-    <c:if test="${requestScope.updateAPIError}">
-        <p>Something went wrong in Update</p>
-    </c:if>
-</div>
-</div>
-<%@ include file="footer.jsp"%>
-
-<script src="${pageContext.request.contextPath}/js/teachers.js">
-
-</script>
 </body>
 </html>

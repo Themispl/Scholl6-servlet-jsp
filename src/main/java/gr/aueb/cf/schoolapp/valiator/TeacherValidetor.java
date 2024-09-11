@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TeacherValidetor<T> {
+
     private final static ITeacherDAO teacherDAO = new TeacherDAOImpl();
     private final static ITeacherService teacherService = new TeacherServiceImpl(teacherDAO);
 
@@ -18,6 +19,7 @@ public class TeacherValidetor<T> {
 
     public static <T extends BaseDTO>Map<String, String> validate(T dto) throws TeacherDAOException{
         Map<String, String> errors = new HashMap<>();
+
         if (dto.getFirstname().matches("^.*\\s+.*$")) {
             errors.put("firstname", "Το όνομα δεν πρέπει να περιλαμβάνει κενά");
         }

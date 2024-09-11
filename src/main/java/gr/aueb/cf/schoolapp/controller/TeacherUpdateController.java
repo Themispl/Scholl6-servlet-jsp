@@ -22,67 +22,69 @@ import java.util.Map;
 
 @WebServlet("/teachers/update")
 public class TeacherUpdateController extends HttpServlet {
+
     private final ITeacherDAO teacherDAO = new TeacherDAOImpl();
     private final ITeacherService teacherService = new TeacherServiceImpl(teacherDAO);
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Integer id = Integer.parseInt(request.getParameter("id").trim());
-        String firstName = request.getParameter("firstName").trim();
-        String lastName = request.getParameter("lastName").trim();
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
 
-        TeacherUpdateDTO updateDTO = new TeacherUpdateDTO(id, firstName, lastName);
-        request.setAttribute("updateDTO", updateDTO);
-        request.getRequestDispatcher("/WEB-INF/jsp/teachers-update.jsp").forward(request, response);
+        Integer id = Integer.parseInt(req.getParameter("id").trim());
+        String firstname = req.getParameter("firstname").trim();
+        String lastname = req.getParameter("lastname").trim();
 
+        TeacherUpdateDTO updateDTO = new TeacherUpdateDTO(id, firstname,lastname);
+        req.setAttribute("updateDTO", updateDTO);
+        req.getRequestDispatcher("/WEB-INF/jsp/teachers-update.jsp").forward(req, resp);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Integer id = Integer.parseInt(request.getParameter("id").trim());
-        String firstName = request.getParameter("firstName").trim();
-        String lastName = request.getParameter("lastName").trim();
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
 
-        TeacherUpdateDTO updateDTO = new TeacherUpdateDTO(id, firstName, lastName);
-        //Data Binding
+        Integer id = Integer.parseInt(req.getParameter("id").trim());
+        String firstname = req.getParameter("firstname").trim();
+        String lastname = req.getParameter("lastname").trim();
 
-        String errorMessage = "";
+        TeacherUpdateDTO updateDTO = new TeacherUpdateDTO(id, firstname, lastname);
         Map<String, String> errors;
-
         String firstnameMessage;
         String lastnameMessage;
-
+        String errorMessage;
         Teacher teacher;
 
-        try{
-
+        try {
+            // Validate dto
             errors = TeacherValidetor.validate(updateDTO);
 
-            if(!errors.isEmpty()){
+            if (!errors.isEmpty()) {
                 firstnameMessage = errors.getOrDefault("firstname", "");
                 lastnameMessage = errors.getOrDefault("lastname", "");
 
-                request.setAttribute("firstnameMessage", firstnameMessage);
-                request.setAttribute("lastnameMessage", lastnameMessage);
-
-                request.setAttribute("updateDTO", updateDTO);
-                request.getRequestDispatcher("/WEB-INF/jsp/teacher-update.jsp").forward(request, response);
+                req.setAttribute("firstnameMessage", firstnameMessage);
+                req.setAttribute("lastnameMessage", lastnameMessage);
+                req.setAttribute("updateDTO", updateDTO);
+                req.getRequestDispatcher("/WEB-INF/jsp/teachers-update.jsp")
+                        .forward(req, resp);
                 return;
             }
+
+            // Call the service
             teacher = teacherService.updateTeacher(updateDTO);
-            TeacherReadOnlyDTO teacherReadOnlyDTO = mapToTeacherReadOnlyDTO(teacher);
-
-            request.setAttribute("teacherInfo", teacherReadOnlyDTO);
-            request.getRequestDispatcher("/WEB-INF/jsp/teacher-updated.jsp").forward(request, response);
-
-        }catch (TeacherDAOException | TeacherNotFoundException e){
+            TeacherReadOnlyDTO readOnlyDTO = mapToReadOnlyDTO(teacher);
+            req.setAttribute("teacherInfo", readOnlyDTO);
+            req.getRequestDispatcher("/WEB-INF/jsp/teachers-updated.jsp")
+                    .forward(req, resp);
+        } catch (TeacherNotFoundException | TeacherDAOException e) {
             errorMessage = e.getMessage();
-            request.setAttribute("errorMessage", errorMessage);
-            request.getRequestDispatcher("/WEB-INF/jsp/teacher-update.jsp").forward(request, response);
+            req.setAttribute("errorMessage", errorMessage);
+            req.getRequestDispatcher("/WEB-INF/jsp/teachers-update.jsp")
+                    .forward(req, resp);
         }
     }
 
-    private TeacherReadOnlyDTO mapToTeacherReadOnlyDTO(Teacher teacher) {
+    private TeacherReadOnlyDTO mapToReadOnlyDTO(Teacher teacher) {
         return new TeacherReadOnlyDTO(teacher.getId(), teacher.getFirstname(), teacher.getLastname());
     }
 }
