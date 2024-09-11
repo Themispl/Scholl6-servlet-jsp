@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import javax.management.relation.Role;
 import java.io.IOException;
 import java.util.Map;
 
@@ -35,6 +36,7 @@ public class UserRegisterController extends HttpServlet {
         String username = request.getParameter("username").trim();
         String password = request.getParameter("password").trim();
         String confirmPassword = request.getParameter("confirmPassword").trim();
+        String role = request.getParameter("role").trim();
 
         String errorMessage = "";
         Map<String, String> errors;
@@ -42,16 +44,19 @@ public class UserRegisterController extends HttpServlet {
         String usernameMessage;
         String passwordMessage;
         String confirmPasswordMessage;
+
         User user;
 
         try{
-            insertUserDto = new InsertUserDTO(username, password, confirmPassword);
+            insertUserDto = new InsertUserDTO(username, password, confirmPassword, role);
             errors = UserValidator.validate(insertUserDto);
 
             if(!errors.isEmpty()){
                 usernameMessage = errors.getOrDefault("username", "");
                 passwordMessage = errors.getOrDefault("password", "");
                 confirmPasswordMessage = errors.getOrDefault("confirmPassword", "");
+
+
 
                 request.setAttribute("usernameMessage", usernameMessage);
                 request.setAttribute("passwordMessage", passwordMessage);
